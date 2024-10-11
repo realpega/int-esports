@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming Tournament - Sign Up / Login</title>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mt-5">Gaming Tournament</h2>
+        
+        <div class="card mt-3 p-3">
+            <h3>Sign Up</h3>
+            <div class="form-group">
+                <label for="signup-name">Name</label>
+                <input type="text" class="form-control" id="signup-name" placeholder="Name" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-mobile">Mobile Number</label>
+                <input type="tel" class="form-control" id="signup-mobile" placeholder="Mobile Number" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-email">Email</label>
+                <input type="email" class="form-control" id="signup-email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-password">Password</label>
+                <input type="password" class="form-control" id="signup-password" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-referral">Referral Code</label>
+                <input type="text" class="form-control" id="signup-referral" placeholder="Referral Code">
+            </div>
+            <button id="signup-btn" class="btn btn-primary mt-2">Sign Up</button>
+            <p id="signup-message" class="mt-3 text-success"></p>
+        </div>
+
+        <div class="card mt-4 p-3">
+            <h3>Login</h3>
+            <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" class="form-control" id="login-email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" class="form-control" id="login-password" placeholder="Password" required>
+            </div>
+            <button id="login-btn" class="btn btn-success mt-2">Login</button>
+            <p id="login-message" class="mt-3 text-success"></p>
+        </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+      import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+      import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCy0ETSqY4VOrowGKiGJg6o6oNjNGTl1M4",
+        authDomain: "tourney-228a2.firebaseapp.com",
+        projectId: "tourney-228a2",
+        storageBucket: "tourney-228a2.appspot.com",
+        messagingSenderId: "431696358196",
+        appId: "1:431696358196:web:e57041f4a807b8f7ed5361",
+        measurementId: "G-M3KH56B6YV",
+        databaseURL: "https://tourney-228a2-default-rtdb.firebaseio.com/"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth();
+      const database = getDatabase(app);
+
+      document.getElementById('signup-btn').addEventListener('click', () => {
+          const name = document.getElementById('signup-name').value;
+          const mobile = document.getElementById('signup-mobile').value;
+          const email = document.getElementById('signup-email').value;
+          const password = document.getElementById('signup-password').value;
+          const referralCode = document.getElementById('signup-referral').value;
+
+          createUserWithEmailAndPassword(auth, email, password)
+              .then((userCredential) => {
+                  const user = userCredential.user;
+                  // Store user data in Firebase Realtime Database
+                  set(ref(database, 'users/' + user.uid), {
+                      name: name,
+                      mobile: mobile,
+                      email: email,
+                      referralCode: referralCode
+                  }).then(() => {
+                      window.location.href = 'dashboard.html'; // Redirect to dashboard on successful signup
+                  });
+              })
+              .catch((error) => {
+                  document.getElementById('signup-message').textContent = 'Error: ' + error.message;
+              });
+      });
+
+      document.getElementById('login-btn').addEventListener('click', () => {
+          const email = document.getElementById('login-email').value;
+          const password = document.getElementById('login-password').value;
+
+          signInWithEmailAndPassword(auth, email, password)
+              .then((userCredential) => {
+                  window.location.href = 'dashboard.html'; // Redirect to dashboard on successful login
+              })
+              .catch((error) => {
+                  document.getElementById('login-message').textContent = 'Error: ' + error.message;
+              });
+      });
+    </script>
+</body>
+</html>

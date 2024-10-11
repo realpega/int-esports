@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mt-5">Tournament Dashboard</h2>
+        <div class="card mt-3 p-3" id="game-details">
+            <h3>Upcoming Game Details</h3>
+            <p id="game-name"><strong>Game Name:</strong> <span></span></p>
+            <p id="game-mode"><strong>Game Mode:</strong> <span></span></p>
+            <p id="team-mode"><strong>Team Mode:</strong> <span></span></p>
+            <p id="map-name"><strong>Map:</strong> <span></span></p>
+            <p id="match-time"><strong>Match Time:</strong> <span></span></p>
+            <p id="entry-fees"><strong>Entry Fees:</strong> <span></span></p>
+            <p id="prize-pool"><strong>Prize Pool:</strong> <span></span></p>
+        </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+      import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCy0ETSqY4VOrowGKiGJg6o6oNjNGTl1M4",
+        authDomain: "tourney-228a2.firebaseapp.com",
+        projectId: "tourney-228a2",
+        storageBucket: "tourney-228a2.appspot.com",
+        messagingSenderId: "431696358196",
+        appId: "1:431696358196:web:e57041f4a807b8f7ed5361",
+        measurementId: "G-M3KH56B6YV",
+        databaseURL: "https://tourney-228a2-default-rtdb.firebaseio.com/"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const database = getDatabase(app);
+
+      const gameDetailsRef = ref(database, 'gameDetails');
+      onValue(gameDetailsRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+              document.querySelector('#game-name span').textContent = data.gameName;
+              document.querySelector('#game-mode span').textContent = data.gameMode;
+              document.querySelector('#team-mode span').textContent = data.teamMode;
+              document.querySelector('#map-name span').textContent = data.mapName;
+              document.querySelector('#match-time span').textContent = new Date(data.matchTime).toLocaleString();
+              document.querySelector('#entry-fees span').textContent = data.entryFees;
+              document.querySelector('#prize-pool span').textContent = data.prizePool;
+          }
+      });
+    </script>
+</body>
+</html>
