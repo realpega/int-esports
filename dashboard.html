@@ -19,6 +19,18 @@
             <p id="entry-fees"><strong>Entry Fees:</strong> <span></span></p>
             <p id="prize-pool"><strong>Prize Pool:</strong> <span></span></p>
         </div>
+        
+        <div class="card mt-3 p-3" id="game-details-2">
+            <h3>Second Match Details</h3>
+            <p id="game-name-2"><strong>Game Name:</strong> <span></span></p>
+            <p id="game-mode-2"><strong>Game Mode:</strong> <span></span></p>
+            <p id="team-mode-2"><strong>Team Mode:</strong> <span></span></p>
+            <p id="map-name-2"><strong>Map:</strong> <span></span></p>
+            <p id="match-time-2"><strong>Match Time:</strong> <span></span></p>
+            <p id="entry-fees-2"><strong>Entry Fees:</strong> <span></span></p>
+            <p id="prize-pool-2"><strong>Prize Pool:</strong> <span></span></p>
+        </div>
+    </div>
     </div>
 
     <script type="module">
@@ -52,6 +64,20 @@
               document.querySelector('#match-time span').textContent = new Date(data.matchTime).toLocaleString();
               document.querySelector('#entry-fees span').textContent = data.entryFees;
               document.querySelector('#prize-pool span').textContent = data.prizePool;
+          }
+      });
+
+      const gameDetailsRef2 = ref(database, 'gameDetails2');
+      onValue(gameDetailsRef2, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+              document.querySelector('#game-name-2 span').textContent = data.gameName;
+              document.querySelector('#game-mode-2 span').textContent = data.gameMode;
+              document.querySelector('#team-mode-2 span').textContent = data.teamMode;
+              document.querySelector('#map-name-2 span').textContent = data.mapName;
+              document.querySelector('#match-time-2 span').textContent = new Date(data.matchTime).toLocaleString();
+              document.querySelector('#entry-fees-2 span').textContent = data.entryFees;
+              document.querySelector('#prize-pool-2 span').textContent = data.prizePool;
           }
       });
     </script>
